@@ -43,7 +43,7 @@ The complicated part in here is understand de "Date format" pattern, because you
 Examples:
 ```bash
 Username: foo
-Date format(yyyymmddhhmm): 010320201407
+Date format(yyyymmddhhmm): 010220061504
 Secret key: password1234
 ```
 
@@ -53,12 +53,12 @@ In the example, the date format pattern is "month-day-year-hour-minutes". The al
 password1234
 010320201407
 (p+0)+(a+1)+(s+0)+(s+3)+(w+2)+(o+0)+(r+2)+(d+0)+(1+1)+(2+4)+(3+0)+(4+7)
-  p  +  b  +  s  +  v  +  y  +  o  +  t  +  d  +  2  +  6  +  3  +  B
+  p  +  b  +  s  +  v  +  y  +  o  +  t  +  d  +  2  +  6  +  3  +  ;
 ```
 
-The password will be: **pbsvyotd263B**
+The password will be: **pbsvyotd263;**
 
-And in the next minute will be: **pbsvyotd263C**
+And in the next minute will be: **pbsvyotd263<**
 
 In case that your secret was password123 instead of password1234, the last pattern will not be executed, so your password will change every 10 minutes.
 
