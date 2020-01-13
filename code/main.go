@@ -58,9 +58,10 @@ func main(){
         }
 
         cronjob()
-    } else {
-        updatePassword()
+        return
     }
+
+    updatePassword()
 }
 
 func config() (err error){
