@@ -56,14 +56,14 @@ password1234
   p  +  b  +  s  +  v  +  y  +  o  +  t  +  d  +  2  +  6  +  3  +  B
 ```
 
-The password will be: pbsvyotd263B
+The password will be: **pbsvyotd263B**
 
-And in the next minute will be: pbsvyotd263C
+And in the next minute will be: **pbsvyotd263C**
 
 In case that your secret was password123 instead of password1234, the last pattern will not be executed, so your password will change every 10 minutes.
 
-The password will be: pbsvyotd263
+The password will be: **pbsvyotd263**
 
-And in the next minute will be(exactly the same): pbsvyotd263
+And in the next minute will be(exactly the same): **pbsvyotd263**
 
-But, at 14:10, it will be: pbsvyotd264
+But, at 14:10, it will be: **pbsvyotd264**
