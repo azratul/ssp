@@ -65,7 +65,7 @@ func main(){
 
 func config() (err error){
     reader := bufio.NewReader(os.Stdin)
-    fmt.Print("Enter username: ")
+    fmt.Print("Username: ")
     user, _ := reader.ReadString('\n')
     user = strings.TrimSpace(user)
 
