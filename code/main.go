@@ -12,7 +12,7 @@ import (
     "strconv"
     "os/exec"
     "io/ioutil"
-    "encoding/hex"
+    "encoding/base64"
 
     "golang.org/x/crypto/openpgp"
     "golang.org/x/crypto/openpgp/armor"
@@ -28,7 +28,7 @@ var packetConfig *packet.Config
 
 func init(){
     out, err  := exec.Command("dmidecode", "-s", "system-uuid").Output()
-    passphrase = hex.EncodeToString(out)
+    passphrase = base64.StdEncoding.EncodeToString(out)
 
     if len(passphrase) > 32 {
         passphrase = passphrase[0:32]
