@@ -134,7 +134,10 @@ func config() (err error){
 func cronjob(){
     f, err := os.OpenFile("/etc/crontab", os.O_APPEND|os.O_RDWR, 0644)
     if err != nil {
-        log.Println(err)
+        //log.Println(err)
+        log.Println("Creating timer and service, wait a second...")
+        createService()
+        return
     }
     defer f.Close()
 
@@ -147,6 +150,64 @@ func cronjob(){
 
     if _, err := f.WriteString(cmd + "\n"); err != nil {
         log.Println(err)
+    }
+}
+
+func createService(){
+    service := `[Unit]
+Description=Shoulder Surfing Protector service
+After=systemd-sysusers.service
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c "` + os.Args[0] + `"`
+    timer := `[Unit]
+Description=1min timer
+
+[Timer]
+OnCalendar=*:0/1:0
+Persistent=yes
+Unit=ssp.service
+AccuracySec=1
+
+[Install]
+WantedBy=default.target`
+
+    path := "/usr/lib/systemd/system/ssp"
+
+    f, err := os.OpenFile(path + ".service", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+    if err != nil {
+        return
+    }
+    defer f.Close()
+
+    _ = f.Truncate(0)
+    _, _ = f.Seek(0,0)
+
+    if _, err := f.WriteString(service); err != nil {
+        log.Println(err)
+        return
+    }
+
+    f, err = os.OpenFile(path + ".timer", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+    if err != nil {
+        return
+    }
+    defer f.Close()
+
+    _ = f.Truncate(0)
+    _, _ = f.Seek(0,0)
+
+    if _, err := f.WriteString(timer); err != nil {
+        log.Println(err)
+        return
+    }
+
+    cmd := exec.Command("systemctl", "enable", "--now", "ssp.timer")
+    err = cmd.Run()
+
+    if err != nil {
+        log.Fatalf("Cannot execute the command: %s", err)
     }
 }
 
