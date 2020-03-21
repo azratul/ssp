@@ -21,6 +21,7 @@ import (
 
 const dir  = "/etc/ssp/"
 const file = "users"
+const version=1.0
 
 var passphrase string
 var settings *bool
