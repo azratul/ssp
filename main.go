@@ -19,9 +19,10 @@ import (
     "golang.org/x/crypto/openpgp/packet"
 )
 
+var AppVersion="1.0.0"
+
 const dir  = "/etc/ssp/"
 const file = "users"
-const AppVersion="1.0.0"
 
 var passphrase string
 var settings *bool
