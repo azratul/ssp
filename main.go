@@ -21,7 +21,7 @@ import (
 
 const dir  = "/etc/ssp/"
 const file = "users"
-const version=1.0
+const AppVersion="1.0.0"
 
 var passphrase string
 var settings *bool
@@ -44,11 +44,17 @@ func init(){
     }
 
     settings = flag.Bool("config", false, "Add or update a member")
+    version := flag.Bool("v", false, "Prints current SSP version")
 
     flag.Parse()
 
     if err = os.MkdirAll(dir, 0600); err != nil {
         log.Println("Creating folder error!")
+    }
+
+    if *version {
+        fmt.Printf("Shoulder Surfing Protector - Version %s\n",AppVersion)
+        os.Exit(0)
     }
 }
 
@@ -313,7 +319,7 @@ func Decrypt(ciphertext []byte, password string, packetConfig *packet.Config) (p
     failed := false
     prompt := func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
         if failed {
-            return nil, fmt.Errorf("decryption failed")
+            return nil, fmt.Errorf("Decryption failed")
         }
         failed = true
         return []byte(password), nil
