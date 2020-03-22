@@ -31,7 +31,6 @@ var packetConfig *packet.Config
 func init(){
     out, err  := exec.Command("cat", "/sys/class/dmi/id/product_uuid").Output()
     passphrase = base64.StdEncoding.EncodeToString(out)
-    fmt.Println(passphrase)
 
     if len(passphrase) > 32 {
         passphrase = passphrase[0:32]
