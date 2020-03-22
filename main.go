@@ -37,7 +37,7 @@ func init(){
     }
 
     if err != nil {
-        log.Fatalf("Cannot execute the command: %s", err)
+        fmt.Printf("Cannot execute the command, you need root privileges")
     }
 
     packetConfig = &packet.Config{
