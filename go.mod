@@ -1,4 +1,4 @@
-module github.com/azratul/shoulder-surfing-protector
+module github.com/azratul/ssp
 
 go 1.13
 
