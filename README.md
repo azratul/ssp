@@ -1,4 +1,4 @@
-# Shoulder Surfing Protector
+# ssp
 
 ## Description
 
