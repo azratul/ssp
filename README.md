@@ -46,7 +46,7 @@ yyyy: Year
 ```
 Secret key: Only you will know this. This will be the base for your algorithm
 
-The complicated part in here is understand de "Date format" pattern, because you need to know exactly how it works. Your secret key is formed with characters that we can asigned to an [ASCII table](https://ascii.cl/) and iterate over this table according to numbers in your date format pattern(don't worry, examples below).
+The complicated part in here is understand de "Date format" pattern, because you need to know exactly how it works. Your secret key is formed with characters that we can assign to an [ASCII table](https://ascii.cl/) and iterate over this table according to numbers in your date format pattern(don't worry, examples below).
 
 Examples:
 ```bash
