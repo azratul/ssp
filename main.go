@@ -38,6 +38,7 @@ func init(){
 
     if err != nil {
         fmt.Printf("Cannot execute the command, you need root privileges")
+        os.Exit(0)
     }
 
     packetConfig = &packet.Config{
@@ -78,9 +79,10 @@ func config() (err error){
     user, _ := reader.ReadString('\n')
     user = strings.TrimSpace(user)
 
-    fmt.Print("Date format(yyyymmddhhmm): ")
+    fmt.Print("Date format(yyyymmddhhii): ")
     format, _ := reader.ReadString('\n')
-    format = strings.TrimSpace(format)
+    stdToGo(&format)
+    fmt.Println(format)
 
     fmt.Print("Secret key: ")
     fmt.Print("\033[8m")
@@ -159,6 +161,15 @@ func cronjob(){
     if _, err := f.WriteString(cmd + "\n"); err != nil {
         log.Println(err)
     }
+}
+
+func stdToGo(format *string) {
+    x := strings.TrimSpace(*format)
+    x  = strings.Replace(x, "yyyy", "2006", -1)
+    x  = strings.Replace(x, "mm", "01", -1)
+    x  = strings.Replace(x, "dd", "02", -1)
+    x  = strings.Replace(x, "hh", "15", -1)
+    *format = strings.Replace(x, "ii", "04", -1)
 }
 
 func createService(){

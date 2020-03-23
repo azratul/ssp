@@ -31,7 +31,7 @@ ssp -config
 2. Follow the instructions.
 ```bash
 Username: USER
-Date format(yyyymmddhhmm): 200601021504
+Date format(yyyymmddhhii): yyyymmddhhii
 Secret key: **********
 ```
 Username: The account with a password based on an algorithm
@@ -43,7 +43,7 @@ The complicated part in here is understand de "Date format" pattern, because you
 Examples:
 ```bash
 Username: foo
-Date format(yyyymmddhhmm): 010220061504
+Date format(yyyymmddhhii): mmddyyyyhhii
 Secret key: password1234
 ```
 
