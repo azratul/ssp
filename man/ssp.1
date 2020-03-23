@@ -1,0 +1,62 @@
+.\" Manpage for Shoulder Surfing Protector
+.\" Contact azratul@gmail.com to correct errors or typos.
+.TH man 8 "23 Mar 2020" "1.0" "ssp man page"
+.SH NAME
+ssp \- An app that is capable of protect your password by changing it every single minute 
+.SH DESCRIPTION
+Shoulder Surfing Protector is capable of protect your password by changing it every single minute, so a Social Engineering Hacker will not be able to stole your password or take control of your machine. All you need is a Secret Key and a format pattern based on datetime.
+
+.B IT IS NOT RECOMMENDED to use in root accounts because, eventually, it will be the only way to recover your account if you forget your Secret Key or something goes wrong.
+.SH OPTIONS
+.SS -config
+.TP
+.IR DESCRIPTION
+Add or update a user. This is mandatory before the first run.
+.TP
+.B Username:
+The account with a password based on an algorithm
+.TP
+.B Date format(yyyymmddhhii):
+It is a format pattern to generate the password(based on your secret key)
+.TP
+.B Secret key:
+Only you will know this. This will be the base for your algorithm
+.TP
+Your secret key is formed with characters that we can asigned to an ASCII table and iterate over this table according to numbers in your date format pattern
+
+.SS -v
+.TP
+Prints current SSP version
+
+.SH EXAMPLES
+
+.SS ssp -config
+.TP
+Username: foo
+.TP
+Date format(yyyymmddhhii): mmddyyyyhhii
+.TP
+Secret key: password1234
+.TP
+In the example, the date format pattern is "month-day-year-hour-minutes". The algorithm is very simple, just iterate over your secret key adding a number based on your pattern. So, if today is Jan 03, 2020 at 14:07 hrs.
+.TP
+password1234
+.TP
+010320201407
+.TP
+(p+0)+(a+1)+(s+0)+(s+3)+(w+2)+(o+0)+(r+2)+(d+0)+(1+1)+(2+4)+(3+0)+(4+7)
+.TP
+  p  +  b  +  s  +  v  +  y  +  o  +  t  +  d  +  2  +  6  +  3  +  ;
+.TP
+The password will be:
+.BR pbsvyotd263;
+.TP
+And in the next minute will be:
+.BR pbsvyotd263<
+
+.SH SEE ALSO
+.B chpasswd(5) 
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Claudio Lepín (azratul@gmail.com)
