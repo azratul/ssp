@@ -35,7 +35,12 @@ Date format(yyyymmddhhii): yyyymmddhhii
 Secret key: **********
 ```
 Username: The account with a password based on an algorithm
-Date format: It is a format pattern to generate the password(based on your secret key). In [Golang datetime format](https://golang.org/pkg/time/#pkg-constants).
+Date format: It is a format pattern to generate the password(based on your secret key).
+  yyyy: Year
+  mm: Month
+  dd: Day
+  hh: Hour
+  ii: Minute
 Secret key: Only you will know this. This will be the base for your algorithm
 
 The complicated part in here is understand de "Date format" pattern, because you need to know exactly how it works. Your secret key is formed with characters that we can asigned to an [ASCII table](https://ascii.cl/) and iterate over this table according to numbers in your date format pattern(don't worry, examples below).
