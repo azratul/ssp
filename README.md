@@ -34,7 +34,8 @@ Username: USER
 Date format(yyyymmddhhii): yyyymmddhhii
 Secret key: **********
 ```
-Username: The account with a password based on an algorithm
+Username: The account with a password based on an algorithm.
+
 Date format: It is a format pattern to generate the password(based on your secret key).
 ```bash
 yyyy: Year
