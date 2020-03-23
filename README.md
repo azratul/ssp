@@ -38,10 +38,10 @@ Username: The account with a password based on an algorithm
 Date format: It is a format pattern to generate the password(based on your secret key).
 ```bash
 yyyy: Year
- mm: Month
- dd: Day
- hh: Hour
- ii: Minute
+  mm: Month
+  dd: Day
+  hh: Hour
+  ii: Minute
 ```
 Secret key: Only you will know this. This will be the base for your algorithm
 
