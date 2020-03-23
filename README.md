@@ -2,7 +2,7 @@
 
 ## Description
 
-Shoulder Surfing Protector is capable of protect your password by changing it every single minute, so a Social Engineering Hacker will not be able to stole your password or take control of your machine. All you need is a Secret Key and a forma pattern based on datetime.
+Shoulder Surfing Protector is capable of protect your password by changing it every single minute, so a Social Engineering Hacker will not be able to stole your password or take control of your machine. All you need is a Secret Key and a format pattern based on datetime.
 
 Is not recommended to use in root accounts because, eventually, it will be the only way to recover your account if you forget your Secret Key or something goes wrong.
 
