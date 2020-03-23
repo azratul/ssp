@@ -82,7 +82,6 @@ func config() (err error){
     fmt.Print("Date format(yyyymmddhhii): ")
     format, _ := reader.ReadString('\n')
     stdToGo(&format)
-    fmt.Println(format)
 
     fmt.Print("Secret key: ")
     fmt.Print("\033[8m")
