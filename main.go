@@ -19,21 +19,25 @@ import (
 	"golang.org/x/crypto/openpgp/packet"
 )
 
-var AppVersion = "1.0.0"
+const (
+	appVersion = "1.0.0"
+	dir        = "/etc/ssp/"
+	file       = "users"
+	maxPassLen = 32
+)
 
-const dir = "/etc/ssp/"
-const file = "users"
-
-var passphrase string
-var settings *bool
-var packetConfig *packet.Config
+var (
+	passphrase   string
+	settings     *bool
+	packetConfig *packet.Config
+)
 
 func init() {
 	out, err := exec.Command("cat", "/sys/class/dmi/id/product_uuid").Output()
 	passphrase = base64.StdEncoding.EncodeToString(out)
 
-	if len(passphrase) > 32 {
-		passphrase = passphrase[0:32]
+	if len(passphrase) > maxPassLen {
+		passphrase = passphrase[:maxPassLen]
 	}
 
 	if err != nil {
@@ -55,7 +59,7 @@ func init() {
 	}
 
 	if *version {
-		fmt.Printf("Shoulder Surfing Protector - Version %s\n", AppVersion)
+		fmt.Printf("Shoulder Surfing Protector - Version %s\n", appVersion)
 		os.Exit(0)
 	}
 }
