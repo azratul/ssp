@@ -14,22 +14,21 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/packet"
+	"filippo.io/age"
+	"filippo.io/age/armor"
 )
 
 const (
-	appVersion = "1.0.0"
+	appVersion = "1.1.0"
 	dir        = "/etc/ssp/"
 	file       = "users"
 	maxPassLen = 32
 )
 
 var (
-	passphrase   string
-	settings     *bool
-	packetConfig *packet.Config
+	passphrase string
+	settings   *bool
+	identity   age.Identity
 )
 
 func init() {
@@ -45,10 +44,6 @@ func init() {
 		os.Exit(0)
 	}
 
-	packetConfig = &packet.Config{
-		DefaultCipher: packet.CipherAES256,
-	}
-
 	settings = flag.Bool("config", false, "Add or update a member")
 	version := flag.Bool("v", false, "Prints current SSP version")
 
@@ -61,6 +56,11 @@ func init() {
 	if *version {
 		fmt.Printf("Shoulder Surfing Protector - Version %s\n", appVersion)
 		os.Exit(0)
+	}
+
+	identity, err = age.NewScryptIdentity(passphrase)
+	if err != nil {
+		log.Fatalf("Failed to create age identity: %v", err)
 	}
 }
 
@@ -108,7 +108,7 @@ func config() (err error) {
 
 	if len(b) > 0 {
 		var decrypted []string
-		if decrypted, err = Decrypt(b, passphrase, packetConfig); err != nil {
+		if decrypted, err = Decrypt(b); err != nil {
 			return
 		}
 
@@ -128,7 +128,7 @@ func config() (err error) {
 		text = strings.Join(lines, "\n")
 	}
 
-	encrypted, err := Encrypt(text, passphrase, packetConfig)
+	encrypted, err := Encrypt(text)
 
 	if err != nil {
 		return
@@ -242,7 +242,7 @@ func updatePassword() {
 
 	b, _ := io.ReadAll(data)
 
-	decrypted, err := Decrypt(b, passphrase, packetConfig)
+	decrypted, err := Decrypt(b)
 	if err != nil {
 		log.Fatalf("Cannot decrypt the file: %s\n", err)
 	}
@@ -296,61 +296,44 @@ func changePassword(fields []string) {
 	}
 }
 
-func Encrypt(plaintext string, password string, packetConfig *packet.Config) (ciphertext string, err error) {
-	encbuf := bytes.NewBuffer(nil)
-
-	w, err := armor.Encode(encbuf, "PGP MESSAGE", nil)
+func Encrypt(plaintext string) (ciphertext string, err error) {
+	recipient, err := age.NewScryptRecipient(passphrase)
 	if err != nil {
-		return
-	}
-	defer w.Close()
-
-	pt, err := openpgp.SymmetricallyEncrypt(w, []byte(password), nil, packetConfig)
-	if err != nil {
-		return
-	}
-	defer pt.Close()
-
-	_, err = pt.Write([]byte(plaintext))
-	if err != nil {
-		return
+		return "", err
 	}
 
-	pt.Close()
-	w.Close()
-	ciphertext = encbuf.String()
+	var buf bytes.Buffer
+	armorWriter := armor.NewWriter(&buf)
 
-	return
+	w, err := age.Encrypt(armorWriter, recipient)
+	if err != nil {
+		return "", err
+	}
+
+	_, err = io.WriteString(w, plaintext)
+	if err != nil {
+		return "", err
+	}
+	if err := w.Close(); err != nil {
+		return "", err
+	}
+
+	armorWriter.Close()
+	return buf.String(), nil
 }
 
-func Decrypt(ciphertext []byte, password string, packetConfig *packet.Config) (plaintext []string, err error) {
-	decbuf := bytes.NewBuffer(ciphertext)
+func Decrypt(ciphertext []byte) (plaintext []string, err error) {
+	armorReader := armor.NewReader(bytes.NewReader(ciphertext))
 
-	armorBlock, err := armor.Decode(decbuf)
+	r, err := age.Decrypt(armorReader, identity)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	failed := false
-	prompt := func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
-		if failed {
-			return nil, fmt.Errorf("Decryption failed")
-		}
-		failed = true
-		return []byte(password), nil
-	}
-
-	md, err := openpgp.ReadMessage(armorBlock.Body, nil, prompt, packetConfig)
+	text, err := io.ReadAll(r)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	text, err := io.ReadAll(md.UnverifiedBody)
-	if err != nil {
-		return
-	}
-
-	plaintext = strings.Split(string(text), "\n")
-
-	return
+	return strings.Split(string(text), "\n"), nil
 }
